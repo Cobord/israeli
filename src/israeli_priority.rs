@@ -307,6 +307,8 @@ where
 }
 
 mod test {
+    // TODO nontrivial tests
+
     use super::Friendly;
 
     const MY_U8_FREINDLINESS: u8 = 5;
