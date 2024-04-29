@@ -1,4 +1,6 @@
 pub trait AbstractPriorityQueue<T, P: Ord> {
+    fn empty_copy(&self) -> Self;
+
     fn my_peek(&self) -> Option<(&T, &P)>;
 
     fn my_enqueue(&mut self, new_obj: T, new_obj_priority: P);

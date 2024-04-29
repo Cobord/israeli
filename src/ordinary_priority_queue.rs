@@ -8,6 +8,10 @@ where
     T: Eq + Hash,
     P: Ord + Clone,
 {
+    fn empty_copy(&self) -> Self {
+        todo!()
+    }
+
     fn my_peek(&self) -> Option<(&T, &P)> {
         self.peek()
     }

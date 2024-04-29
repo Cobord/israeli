@@ -5,9 +5,12 @@ use crate::my_priority_queue::AbstractPriorityQueue;
 #[repr(transparent)]
 struct NoPriorityQueue<T, P>(VecDeque<(T, P)>);
 
-impl<T, P> NoPriorityQueue<T, P> {
+impl<T, P> NoPriorityQueue<T, P>
+where
+    P: Ord + Default,
+{
     #[allow(dead_code)]
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self(VecDeque::new())
     }
 }
@@ -16,6 +19,10 @@ impl<T, P> AbstractPriorityQueue<T, P> for NoPriorityQueue<T, P>
 where
     P: Ord + Default,
 {
+    fn empty_copy(&self) -> Self {
+        todo!()
+    }
+
     fn my_peek(&self) -> Option<(&T, &P)> {
         #[allow(clippy::map_identity)]
         self.0.front().map(|(z, w)| (z, w))

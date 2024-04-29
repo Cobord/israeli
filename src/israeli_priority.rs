@@ -86,6 +86,10 @@ where
     P: Ord + Clone,
     H: Hash + Eq + Clone,
 {
+    fn empty_copy(&self) -> Self {
+        todo!()
+    }
+
     fn my_peek(&self) -> Option<(&T, &P)> {
         match &self.current_friend_group {
             None => self.underlying.peek().map(|(gp, p)| {

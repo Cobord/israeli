@@ -6,6 +6,8 @@ mod ordinary_priority_queue;
 mod dependency_queue;
 mod israeli_priority;
 
+mod nested_queue;
+
 fn main() {
     println!("Hello, World!");
 }

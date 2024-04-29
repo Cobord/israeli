@@ -22,6 +22,10 @@ where
     T: Blocker + Clone,
     P: Ord + Clone,
 {
+    fn empty_copy(&self) -> Self {
+        todo!()
+    }
+
     fn my_peek(&self) -> Option<(&T, &P)> {
         let mut srcs = self.srcs.iter().map(|id| {
             self.my_dag
