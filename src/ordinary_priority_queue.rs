@@ -24,8 +24,8 @@ where
         self.pop()
     }
 
-    fn my_into_sorted_vec(self) -> Vec<T> {
-        self.into_sorted_vec()
+    fn all_items_iter(self) -> impl Iterator<Item = T> {
+        self.into_sorted_vec().into_iter()
     }
 
     fn my_len(&self) -> usize {

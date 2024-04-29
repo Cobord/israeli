@@ -21,14 +21,13 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     */
     fn dequeue_batch(&mut self, around_how_many: usize, hard_limit: usize) -> Vec<(T, P)>;
 
-    fn my_into_sorted_vec(mut self) -> Vec<T>
+    fn all_items_iter(mut self) -> impl Iterator<Item = T>
     where
         Self: Sized,
     {
         self.dequeue_batch(self.my_len(), self.my_len())
             .into_iter()
             .map(|z| z.0)
-            .collect()
     }
 
     fn my_len(&self) -> usize;
