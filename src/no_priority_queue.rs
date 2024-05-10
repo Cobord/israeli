@@ -20,7 +20,7 @@ where
     P: Ord + Default,
 {
     fn empty_copy(&self) -> Self {
-        todo!()
+        Self(VecDeque::with_capacity(self.my_len()))
     }
 
     fn my_peek(&self) -> Option<(&T, &P)> {

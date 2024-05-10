@@ -87,7 +87,9 @@ where
     H: Hash + Eq + Clone,
 {
     fn empty_copy(&self) -> Self {
-        todo!()
+        let mut to_return = Self::with_capacity(self.my_len());
+        to_return.change_combiner(self.priority_combiner);
+        to_return
     }
 
     fn my_peek(&self) -> Option<(&T, &P)> {

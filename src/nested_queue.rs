@@ -252,6 +252,4 @@ where
     }
 }
 
-mod test {
-    
-}
+mod test {}

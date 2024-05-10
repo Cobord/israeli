@@ -9,7 +9,7 @@ where
     P: Ord + Clone,
 {
     fn empty_copy(&self) -> Self {
-        todo!()
+        Self::with_capacity(self.my_len())
     }
 
     fn my_peek(&self) -> Option<(&T, &P)> {

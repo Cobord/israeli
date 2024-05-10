@@ -25,7 +25,15 @@ where
     P: Ord + Clone,
 {
     fn empty_copy(&self) -> Self {
-        todo!()
+        let num_nodes = self.my_len();
+        let num_edges = self.my_dag.edge_count();
+        let num_srcs = self.srcs.len();
+        let num_snks = self.sinks.len();
+        Self {
+            my_dag: Graph::<_, _>::with_capacity(num_nodes, num_edges),
+            srcs: Vec::with_capacity(num_srcs),
+            sinks: Vec::with_capacity(num_snks),
+        }
     }
 
     fn my_peek(&self) -> Option<(&T, &P)> {
@@ -159,6 +167,4 @@ where
     }
 }
 
-mod test {
-    
-}
+mod test {}
