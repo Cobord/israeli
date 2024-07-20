@@ -39,6 +39,6 @@ If priorities don't matter a transparent wrapper of VecDequeue implements these 
 
 ### Ordinary Priority
 
-PriorityQueue from the priority_queue trait implements the trait as well.
+PriorityQueue from the priority_queue crate implements the trait as well.
 
 ###
