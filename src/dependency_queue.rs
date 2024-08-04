@@ -1,15 +1,24 @@
-// TODO
+// TODO test
 
 use petgraph::{graph::NodeIndex, Graph};
 use std::cmp::Ordering;
 
 use crate::my_priority_queue::AbstractPriorityQueue;
 
-trait Blocker {
+pub trait Blocker {
+    /// if self was enqueued before other
+    /// do they have to be dequeued in that order too
+    #[allow(dead_code)]
     fn am_i_blocker(&self, other: &Self) -> bool;
 }
 
-struct BlockingQueue<T, P>
+/// imagine there are commands that are
+/// enqueued in arbitrary order and we are using priorities
+/// to shuffle around which order they get dequeue'd
+/// but there are some that still have to occur before others
+/// regardless of priorities
+#[allow(dead_code)]
+pub struct BlockingQueue<T, P>
 where
     T: Blocker,
     P: Ord,

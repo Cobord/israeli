@@ -4,13 +4,20 @@ use std::{cmp::Ordering, collections::HashMap, hash::Hash};
 
 use crate::my_priority_queue::AbstractPriorityQueue;
 
+/// get a shibooleth that we can compare with equality
+/// to judge if two items in the queue are friends or not
 pub trait Friendly<H: Hash + Eq> {
+    /// use the shibboleths to determine if they are friends
+    #[allow(dead_code)]
     fn is_friend(&self, other: &Self) -> bool {
         self.friendship_shibboleth() == other.friendship_shibboleth()
     }
+
+    /// get the shibboleth
     fn friendship_shibboleth(&self) -> H;
 }
 
+/// are all items in that nonempty collection friends of each other
 fn are_all_friends<T: Friendly<H>, H: Hash + Eq>(new_batch: &NonEmpty<T>) -> (bool, H) {
     let the_shibboleth = new_batch.head.friendship_shibboleth();
     let all_friends = new_batch
@@ -20,6 +27,11 @@ fn are_all_friends<T: Friendly<H>, H: Hash + Eq>(new_batch: &NonEmpty<T>) -> (bo
     (all_friends, the_shibboleth)
 }
 
+/// This isn't really an Israeli queue,
+/// because we have a shibboleth rather than iterating through to look for friends.
+/// But by using a trait with a generic we can avoid that iteration.
+/// That way we have the regular priority queue for the shibboleths
+/// and how the shibboleths translate to nonempty lists of items.
 pub struct IsraeliPriority<T, P, H>
 where
     T: Friendly<H>,
@@ -39,6 +51,11 @@ where
     P: Ord + Clone,
     H: Eq + Hash + Clone,
 {
+    /// setup with capacity for specified number of distinct friend groups
+    /// the way priorities of the portion already in line and a new friend joining
+    /// that friend group is the default which just picks the bigger of the two
+    /// that way a high priority member joining a group in line, can boost
+    /// their priority and move that entire group up even further
     #[allow(dead_code)]
     pub fn with_capacity(capacity: usize) -> Self {
         let default_combiner = |p1: &P, p2: &P| {
@@ -57,11 +74,18 @@ where
         }
     }
 
+    /// provide a different way for priorities to combine
+    /// when a portion is already in line and a new friend joins
+    /// that friend group
     #[allow(dead_code)]
     fn change_combiner(&mut self, new_combiner: fn(&P, &P) -> (bool, P)) {
         self.priority_combiner = new_combiner;
     }
 
+    /// either there is a batch of friends currently in the process of going in
+    /// get them all and their shared priority
+    /// otherwise dequeue only one element and that can bring their friends
+    /// as well through the functionality of my_dequeue
     fn israeli_dequeue_batch(&mut self) -> Option<(NonEmpty<T>, P)> {
         if let Some(current_batch) = self.current_friend_group.take() {
             Some((current_batch.0, current_batch.1))
@@ -102,7 +126,7 @@ where
                     .head;
                 (z, p)
             }),
-            Some((real_group, top_priority)) => Some((&real_group.head, &top_priority)),
+            Some((real_group, top_priority)) => Some((&real_group.head, top_priority)),
         }
     }
 
@@ -314,6 +338,8 @@ mod test {
     use super::Friendly;
 
     const MY_U8_FREINDLINESS: u8 = 5;
+
+    #[allow(dead_code)]
     #[derive(PartialEq, Eq, Debug)]
     #[repr(transparent)]
     struct MyU8(u8);

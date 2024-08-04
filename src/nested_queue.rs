@@ -1,12 +1,18 @@
 use crate::my_priority_queue::AbstractPriorityQueue;
 use std::{collections::HashMap, hash::Hash, marker::PhantomData};
 
-trait CoarseGrainedPriority<P> {
+/// the fine grained priorities can be coarse grained into this type
+/// which means we have a monotone map
+pub trait CoarseGrainedPriority<P> {
+    #[allow(dead_code)]
     fn coarse_grain(p: &P) -> Self;
+    #[allow(dead_code)]
     fn decrement(&mut self);
 }
 
-trait IndexInto<C, Q> {
+/// there is a way to lookup and insert items by C
+/// and the associated data is of type Q
+pub trait IndexInto<C, Q> {
     fn new() -> Self;
     fn get(&self, which: &C) -> Option<&Q>;
     fn get_mut(&mut self, which: &C) -> Option<&mut Q>;
@@ -17,6 +23,7 @@ trait IndexInto<C, Q> {
         Q: 'a;
 }
 
+/// redirect to the corresponding methods in HashMap
 impl<C, Q> IndexInto<C, Q> for HashMap<C, Q>
 where
     C: Hash + Eq,
@@ -49,6 +56,7 @@ where
     }
 }
 
+/// redirect to element access and setting
 impl<Q> IndexInto<usize, Q> for Vec<Option<Q>> {
     fn new() -> Self {
         Vec::new()
@@ -111,7 +119,12 @@ impl<Q> IndexInto<usize, Q> for Vec<Option<Q>> {
     }
 }
 
-struct BucketQueue<T, P, C, Q, Storer>
+/// the items of type T and priority P being stored are being stored in one of potentially
+/// several Q's which are all the same kind of AbstractPriorityQueue for such items and priorities
+/// but they are divided up by the coarsed grained priority
+/// so each one of those are smaller and only storing items with priorities with the same
+/// coarse grained priority
+pub struct BucketQueue<T, P, C, Q, Storer>
 where
     C: CoarseGrainedPriority<P> + Hash + Ord + Clone,
     P: Ord,

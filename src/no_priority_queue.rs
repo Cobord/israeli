@@ -2,6 +2,9 @@ use std::collections::VecDeque;
 
 use crate::my_priority_queue::AbstractPriorityQueue;
 
+/// completely ignoring the priorities and passing the
+/// items first in first out implements the trait AbstractPriorityQueue
+/// in a simple way
 #[repr(transparent)]
 struct NoPriorityQueue<T, P>(VecDeque<(T, P)>);
 

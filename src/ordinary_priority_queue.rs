@@ -3,6 +3,9 @@ use std::hash::Hash;
 
 use crate::my_priority_queue::AbstractPriorityQueue;
 
+/// the ordinary priority queue
+/// of course implements the trait AbstractPriorityQueue
+/// by redirecting to the appropriate methods
 impl<T, P> AbstractPriorityQueue<T, P> for PriorityQueue<T, P>
 where
     T: Eq + Hash,
