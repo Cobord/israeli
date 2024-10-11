@@ -85,7 +85,7 @@ where
     /// either there is a batch of friends currently in the process of going in
     /// get them all and their shared priority
     /// otherwise dequeue only one element and that can bring their friends
-    /// as well through the functionality of my_dequeue
+    /// as well through the functionality of `my_dequeue`
     fn israeli_dequeue_batch(&mut self) -> Option<(NonEmpty<T>, P)> {
         if let Some(current_batch) = self.current_friend_group.take() {
             Some((current_batch.0, current_batch.1))
@@ -145,7 +145,7 @@ where
                     .change_priority(&my_shibboleth, new_priority);
             }
             if let Some(friend_grp) = self.shibboleth_to_friends.get_mut(&my_shibboleth) {
-                friend_grp.push(new_obj)
+                friend_grp.push(new_obj);
             } else {
                 panic!("found shibboleth in priority queue but not the corresponding friends");
             }
@@ -383,7 +383,6 @@ mod test {
             assert_eq!(
                 q.dequeue_batch(10, 10),
                 (1..max_num)
-                    .into_iter()
                     .map(|z| (MyU8(z), max_num - 1 - z))
                     .collect::<Vec<_>>()
             );

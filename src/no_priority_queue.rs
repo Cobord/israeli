@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use crate::my_priority_queue::AbstractPriorityQueue;
 
 /// completely ignoring the priorities and passing the
-/// items first in first out implements the trait AbstractPriorityQueue
+/// items first in first out implements the trait `AbstractPriorityQueue`
 /// in a simple way
 #[repr(transparent)]
 struct NoPriorityQueue<T, P>(VecDeque<(T, P)>);
@@ -32,12 +32,12 @@ where
     }
 
     fn my_enqueue(&mut self, new_obj: T, _new_obj_priority: P) {
-        self.0.push_back((new_obj, P::default()))
+        self.0.push_back((new_obj, P::default()));
     }
 
     fn enqueue_batch(&mut self, new_batch: impl IntoIterator<Item = T>, _new_batch_priority: P) {
         self.0
-            .extend(new_batch.into_iter().map(|z| (z, P::default())))
+            .extend(new_batch.into_iter().map(|z| (z, P::default())));
     }
 
     fn my_dequeue(&mut self) -> Option<(T, P)> {

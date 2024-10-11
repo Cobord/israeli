@@ -4,7 +4,7 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     #[allow(dead_code)]
     fn empty_copy(&self) -> Self;
 
-    /// what would my_dequeue give
+    /// what would `my_dequeue` give
     #[allow(dead_code)]
     fn my_peek(&self) -> Option<(&T, &P)>;
 
@@ -22,9 +22,9 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     /// and how it handles priorities
     fn my_dequeue(&mut self) -> Option<(T, P)>;
 
-    /// if there are fewer than around_how_many gives all of the items in the queue
+    /// if there are fewer than `around_how_many` gives all of the items in the queue
     /// if there are more than that, give some number of items
-    ///     that is at least around_how_many but less than or equal to than the hard limit
+    ///     that is at least `around_how_many` but less than or equal to than the `hard limit`
     ///     where how much more depends on the specific implementer and the specific items involved
     #[allow(dead_code)]
     fn dequeue_batch(&mut self, around_how_many: usize, hard_limit: usize) -> Vec<(T, P)>;

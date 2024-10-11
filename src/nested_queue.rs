@@ -23,7 +23,7 @@ pub trait IndexInto<C, Q> {
         Q: 'a;
 }
 
-/// redirect to the corresponding methods in HashMap
+/// redirect to the corresponding methods in `HashMap`
 impl<C, Q> IndexInto<C, Q> for HashMap<C, Q>
 where
     C: Hash + Eq,
@@ -101,6 +101,7 @@ impl<Q> IndexInto<usize, Q> for Vec<Option<Q>> {
     fn remove(&mut self, which: &usize) -> Option<Q> {
         if *which < self.len() {
             let to_return = std::mem::take(&mut self[*which]);
+            #[allow(clippy::redundant_closure_for_method_calls)]
             if self[*which..].iter().all(|z| z.is_none()) {
                 self.drain(*which..);
             }
@@ -120,7 +121,7 @@ impl<Q> IndexInto<usize, Q> for Vec<Option<Q>> {
 }
 
 /// the items of type T and priority P being stored are being stored in one of potentially
-/// several Q's which are all the same kind of AbstractPriorityQueue for such items and priorities
+/// several Q's which are all the same kind of `AbstractPriorityQueue` for such items and priorities
 /// but they are divided up by the coarsed grained priority
 /// so each one of those are smaller and only storing items with priorities with the same
 /// coarse grained priority

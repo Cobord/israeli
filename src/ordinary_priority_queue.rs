@@ -4,7 +4,7 @@ use std::hash::Hash;
 use crate::my_priority_queue::AbstractPriorityQueue;
 
 /// the ordinary priority queue
-/// of course implements the trait AbstractPriorityQueue
+/// of course implements the trait `AbstractPriorityQueue`
 /// by redirecting to the appropriate methods
 impl<T, P> AbstractPriorityQueue<T, P> for PriorityQueue<T, P>
 where
@@ -89,7 +89,6 @@ mod test {
         assert_eq!(
             q.dequeue_batch(10, 10),
             (1..max_num)
-                .into_iter()
                 .map(|z| (z, max_num - 1 - z))
                 .collect::<Vec<_>>()
         );
