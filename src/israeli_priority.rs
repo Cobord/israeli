@@ -347,7 +347,6 @@ mod test {
 
     use super::Friendly;
 
-    #[allow(dead_code)]
     const MY_U8_FREINDLINESS: u8 = 5;
 
     #[allow(dead_code)]
