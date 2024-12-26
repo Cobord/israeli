@@ -26,6 +26,20 @@ where
     sinks: Vec<NodeIndex>,
 }
 
+impl<T, P> Default for BlockingQueue<T, P>
+where
+    P: Ord,
+    T: Blocker,
+{
+    fn default() -> Self {
+        Self {
+            my_dag: Graph::default(),
+            srcs: Vec::default(),
+            sinks: Vec::default(),
+        }
+    }
+}
+
 impl<T, P> AbstractPriorityQueue<T, P> for BlockingQueue<T, P>
 where
     T: Blocker + Clone,

@@ -44,6 +44,17 @@ where
     priority_combiner: fn(&P, &P) -> (bool, P),
 }
 
+impl<T, P, H> Default for IsraeliPriority<T, P, H>
+where
+    T: Friendly<H>,
+    P: Ord + Clone,
+    H: Eq + Hash + Clone,
+{
+    fn default() -> Self {
+        Self::with_capacity(8)
+    }
+}
+
 impl<T, P, H> IsraeliPriority<T, P, H>
 where
     T: Friendly<H>,
@@ -76,7 +87,7 @@ where
     /// provide a different way for priorities to combine
     /// when a portion is already in line and a new friend joins
     /// that friend group
-    fn change_combiner(&mut self, new_combiner: fn(&P, &P) -> (bool, P)) {
+    pub fn change_combiner(&mut self, new_combiner: fn(&P, &P) -> (bool, P)) {
         self.priority_combiner = new_combiner;
     }
 

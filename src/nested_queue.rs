@@ -135,7 +135,48 @@ where
     lower_bound_occupied_bucket: C,
     junk: PhantomData<T>,
     junk2: PhantomData<P>,
-    dummy: Q,
+    bucket_template: Q,
+}
+
+impl<T, P, C, Q, Storer> Default for BucketQueue<T, P, C, Q, Storer>
+where
+    C: CoarseGrainedPriority<P> + Hash + Ord + Clone + Default,
+    P: Ord,
+    Q: AbstractPriorityQueue<T, P> + Default,
+    Storer: IndexInto<C, Q>,
+{
+    fn default() -> Self {
+        Self {
+            my_buckets: Storer::new(),
+            upper_bound_occupied_bucket: C::default(),
+            lower_bound_occupied_bucket: C::default(),
+            junk: PhantomData,
+            junk2: PhantomData,
+            bucket_template: Q::default(),
+        }
+    }
+}
+
+impl<T, P, C, Q, Storer> BucketQueue<T, P, C, Q, Storer>
+where
+    C: CoarseGrainedPriority<P> + Hash + Ord + Clone,
+    P: Ord,
+    Q: AbstractPriorityQueue<T, P>,
+    Storer: IndexInto<C, Q>,
+{
+    /// pass a lower and upper bound for the coarse grained priorities you are expecting to see
+    /// these don't have to be accurate, but if you pass them accurately it is better
+    /// you also pass an example of Q that is to be used for constructing new buckets
+    pub fn new(lower_bound_occupied_bucket: C, upper_bound_occupied_bucket: C, dummy: &Q) -> Self {
+        Self {
+            my_buckets: Storer::new(),
+            upper_bound_occupied_bucket,
+            lower_bound_occupied_bucket,
+            junk: PhantomData,
+            junk2: PhantomData,
+            bucket_template: dummy.empty_copy(),
+        }
+    }
 }
 
 impl<T, P, C, Q, Storer> AbstractPriorityQueue<T, P> for BucketQueue<T, P, C, Q, Storer>
@@ -152,7 +193,7 @@ where
             lower_bound_occupied_bucket: self.lower_bound_occupied_bucket.clone(),
             junk: self.junk,
             junk2: self.junk2,
-            dummy: self.dummy.empty_copy(),
+            bucket_template: self.bucket_template.empty_copy(),
         }
     }
 
@@ -185,7 +226,7 @@ where
         if let Some(cur_bucket) = self.my_buckets.get_mut(&which_bucket) {
             cur_bucket.my_enqueue(new_obj, new_obj_priority);
         } else {
-            let mut new_bucket = self.dummy.empty_copy();
+            let mut new_bucket = self.bucket_template.empty_copy();
             new_bucket.my_enqueue(new_obj, new_obj_priority);
             self.my_buckets.insert(which_bucket, new_bucket);
         }
@@ -204,7 +245,7 @@ where
         if let Some(cur_bucket) = self.my_buckets.get_mut(&which_bucket) {
             cur_bucket.enqueue_batch(new_batch, new_batch_priority);
         } else {
-            let mut new_bucket = self.dummy.empty_copy();
+            let mut new_bucket = self.bucket_template.empty_copy();
             new_bucket.enqueue_batch(new_batch, new_batch_priority);
             self.my_buckets.insert(which_bucket, new_bucket);
         }
