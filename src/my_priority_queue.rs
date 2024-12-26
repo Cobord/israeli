@@ -5,16 +5,13 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     fn empty_copy(&self) -> Self;
 
     /// what would `my_dequeue` give
-    #[allow(dead_code)]
     fn my_peek(&self) -> Option<(&T, &P)>;
 
     /// insert an item with specified priority
-    #[allow(dead_code)]
     fn my_enqueue(&mut self, new_obj: T, new_obj_priority: P);
 
     /// enqueueing many items all with the same priority, might have a faster implementation than
     /// just doing them one by one
-    #[allow(dead_code)]
     fn enqueue_batch(&mut self, new_batch: impl IntoIterator<Item = T>, new_batch_priority: P);
 
     /// if nonempty, one item comes out
@@ -26,13 +23,11 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     /// if there are more than that, give some number of items
     ///     that is at least `around_how_many` but less than or equal to than the `hard limit`
     ///     where how much more depends on the specific implementer and the specific items involved
-    #[allow(dead_code)]
     fn dequeue_batch(&mut self, around_how_many: usize, hard_limit: usize) -> Vec<(T, P)>;
 
     /// with no more items being enqueue'd
     /// we can just dequeue them all and provide an iterator
     /// over all the items ignoring their priorities
-    #[allow(dead_code)]
     fn all_items_iter(mut self) -> impl Iterator<Item = T>
     where
         Self: Sized,
@@ -43,18 +38,15 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     }
 
     /// how many items are present
-    #[allow(dead_code)]
     fn my_len(&self) -> usize;
 
     /// is the queue empty
-    #[allow(dead_code)]
     fn is_empty(&self) -> bool;
 
     /// dequeue them all
     /// but after the mutable reference issues resolved
     /// more items can still be enqueue'd
     /// unlike ``all_items_iter`` which closed this off
-    #[allow(dead_code)]
     fn drain_all(&mut self) -> Vec<(T, P)> {
         self.dequeue_batch(self.my_len(), self.my_len())
     }

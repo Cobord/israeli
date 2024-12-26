@@ -10,3 +10,4 @@ pub mod ordinary_priority_queue;
 pub use israeli_priority::{Friendly, IsraeliPriority};
 pub use my_priority_queue::AbstractPriorityQueue;
 pub use nested_queue::BucketQueue;
+pub use no_priority_queue::NoPriorityQueue;

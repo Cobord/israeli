@@ -8,7 +8,6 @@ use crate::my_priority_queue::AbstractPriorityQueue;
 pub trait Blocker {
     /// if self was enqueued before other
     /// do they have to be dequeued in that order too
-    #[allow(dead_code)]
     fn am_i_blocker(&self, other: &Self) -> bool;
 }
 
@@ -17,7 +16,6 @@ pub trait Blocker {
 /// to shuffle around which order they get dequeue'd
 /// but there are some that still have to occur before others
 /// regardless of priorities
-#[allow(dead_code)]
 pub struct BlockingQueue<T, P>
 where
     T: Blocker,

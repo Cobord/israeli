@@ -6,14 +6,23 @@ use crate::my_priority_queue::AbstractPriorityQueue;
 /// items first in first out implements the trait `AbstractPriorityQueue`
 /// in a simple way
 #[repr(transparent)]
-struct NoPriorityQueue<T, P>(VecDeque<(T, P)>);
+pub struct NoPriorityQueue<T, P>(VecDeque<(T, P)>);
+
+impl<T, P> Default for NoPriorityQueue<T, P>
+where
+    P: Ord + Default,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl<T, P> NoPriorityQueue<T, P>
 where
     P: Ord + Default,
 {
-    #[allow(dead_code)]
-    fn new() -> Self {
+    #[must_use]
+    pub fn new() -> Self {
         Self(VecDeque::new())
     }
 }

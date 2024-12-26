@@ -4,9 +4,7 @@ use std::{collections::HashMap, hash::Hash, marker::PhantomData};
 /// the fine grained priorities can be coarse grained into this type
 /// which means we have a monotone map
 pub trait CoarseGrainedPriority<P> {
-    #[allow(dead_code)]
     fn coarse_grain(p: &P) -> Self;
-    #[allow(dead_code)]
     fn decrement(&mut self);
 }
 

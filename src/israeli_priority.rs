@@ -8,7 +8,6 @@ use crate::my_priority_queue::AbstractPriorityQueue;
 /// to judge if two items in the queue are friends or not
 pub trait Friendly<H: Hash + Eq> {
     /// use the shibboleths to determine if they are friends
-    #[allow(dead_code)]
     fn is_friend(&self, other: &Self) -> bool {
         self.friendship_shibboleth() == other.friendship_shibboleth()
     }
@@ -77,7 +76,6 @@ where
     /// provide a different way for priorities to combine
     /// when a portion is already in line and a new friend joins
     /// that friend group
-    #[allow(dead_code)]
     fn change_combiner(&mut self, new_combiner: fn(&P, &P) -> (bool, P)) {
         self.priority_combiner = new_combiner;
     }
@@ -338,6 +336,7 @@ mod test {
 
     use super::Friendly;
 
+    #[allow(dead_code)]
     const MY_U8_FREINDLINESS: u8 = 5;
 
     #[allow(dead_code)]
