@@ -1,7 +1,7 @@
 pub trait AbstractPriorityQueue<T, P: Ord> {
     /// a version just like self
     /// but without any actual items
-    #[allow(dead_code)]
+    #[must_use]
     fn empty_copy(&self) -> Self;
 
     /// what would `my_dequeue` give

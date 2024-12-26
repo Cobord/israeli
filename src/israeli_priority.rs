@@ -56,7 +56,7 @@ where
     /// that friend group is the default which just picks the bigger of the two
     /// that way a high priority member joining a group in line, can boost
     /// their priority and move that entire group up even further
-    #[allow(dead_code)]
+    #[must_use]
     pub fn with_capacity(capacity: usize) -> Self {
         let default_combiner = |p1: &P, p2: &P| {
             if p1.cmp(p2) == Ordering::Less {
@@ -110,6 +110,7 @@ where
     P: Ord + Clone,
     H: Hash + Eq + Clone,
 {
+    #[must_use]
     fn empty_copy(&self) -> Self {
         let mut to_return = Self::with_capacity(self.my_len());
         to_return.change_combiner(self.priority_combiner);

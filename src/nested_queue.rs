@@ -24,12 +24,12 @@ pub trait IndexInto<C, Q> {
 }
 
 /// redirect to the corresponding methods in `HashMap`
-impl<C, Q> IndexInto<C, Q> for HashMap<C, Q>
+impl<C, Q, S: ::std::hash::BuildHasher + Default> IndexInto<C, Q> for HashMap<C, Q, S>
 where
     C: Hash + Eq,
 {
     fn new() -> Self {
-        HashMap::new()
+        HashMap::default()
     }
 
     fn get(&self, which: &C) -> Option<&Q> {
