@@ -284,7 +284,7 @@ where
             && self
                 .current_friend_group
                 .as_ref()
-                .map_or(true, |z| z.0.is_empty())
+                .is_none_or(|z| z.0.is_empty())
     }
 
     fn dequeue_batch(&mut self, around_how_many: usize, hard_limit: usize) -> Vec<(T, P)> {

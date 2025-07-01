@@ -74,6 +74,16 @@ mod test {
     }
 
     #[test]
+    fn nothing_in_out_iter() {
+        use crate::reordered_iterator::Reordered;
+        use priority_queue::PriorityQueue;
+        let q = PriorityQueue::<u8, u8>::new();
+        let it = [].into_iter();
+        let mut it = Reordered::<_, _, _, _>::new(it, q, 8);
+        assert!(it.next().is_none());
+    }
+
+    #[test]
     fn same_order_inout() {
         use crate::my_priority_queue::AbstractPriorityQueue;
         use priority_queue::PriorityQueue;
@@ -92,5 +102,41 @@ mod test {
                 .map(|z| (z, max_num - 1 - z))
                 .collect::<Vec<_>>()
         );
+    }
+
+    #[test]
+    fn rev_order_inout() {
+        use crate::reordered_iterator::{Reorderable, Reordered};
+        use priority_queue::PriorityQueue;
+
+        let q = PriorityQueue::<u8, u8>::new();
+        let max_num = 7;
+
+        let it = std::iter::zip(0..=max_num, 20..=max_num + 20).map(Ok);
+        let it = Reordered::new(it, q, 8);
+        #[allow(clippy::cast_possible_truncation)]
+        for (idx, (a, b)) in it.enumerate() {
+            assert_eq!(a + 20, b);
+            assert_eq!(max_num - (idx as u8), a);
+        }
+
+        let q = PriorityQueue::<u8, u8>::new();
+        let max_num = 40;
+
+        let it = std::iter::zip(0..=max_num, 20..=max_num + 20).map(Ok);
+        let it = Reordered::new(it, q, 4);
+        let expected_as = (3..=max_num).chain([2, 1, 0]);
+        for ((a, b), expected_a) in it.zip(expected_as) {
+            assert_eq!(a + 20, b);
+            assert_eq!(expected_a, a);
+        }
+
+        let expected_as = (6..=max_num).chain([5, 4, 3, 2, 1, 0]);
+        let it = std::iter::zip(0..=max_num, 20..=max_num + 20).map(Ok);
+        let q = PriorityQueue::<u8, u8>::new();
+        for ((a, b), expected_a) in it.reorder(q, 7).zip(expected_as) {
+            assert_eq!(a + 20, b);
+            assert_eq!(expected_a, a);
+        }
     }
 }

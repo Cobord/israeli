@@ -16,7 +16,7 @@ pub trait IndexInto<C, Q> {
     fn get_mut(&mut self, which: &C) -> Option<&mut Q>;
     fn insert(&mut self, which: C, value: Q) -> Option<Q>;
     fn remove(&mut self, which: &C) -> Option<Q>;
-    fn values<'a>(&'a self) -> impl Iterator<Item = &Q>
+    fn values<'a>(&'a self) -> impl Iterator<Item = &'a Q>
     where
         Q: 'a;
 }
@@ -46,7 +46,7 @@ where
         self.remove(which)
     }
 
-    fn values<'a>(&'a self) -> impl Iterator<Item = &Q>
+    fn values<'a>(&'a self) -> impl Iterator<Item = &'a Q>
     where
         Q: 'a,
     {
@@ -109,7 +109,7 @@ impl<Q> IndexInto<usize, Q> for Vec<Option<Q>> {
         }
     }
 
-    fn values<'a>(&'a self) -> impl Iterator<Item = &Q>
+    fn values<'a>(&'a self) -> impl Iterator<Item = &'a Q>
     where
         Q: 'a,
     {
@@ -201,6 +201,7 @@ where
         let mut looking_in_bucket = self.upper_bound_occupied_bucket.clone();
         while looking_in_bucket >= self.lower_bound_occupied_bucket {
             if let Some(cur_bucket) = self.my_buckets.get(&looking_in_bucket) {
+                #[allow(clippy::single_match)]
                 match cur_bucket.my_peek() {
                     z @ Some(_) => {
                         return z;
