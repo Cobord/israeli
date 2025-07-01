@@ -13,3 +13,6 @@ pub use my_priority_queue::AbstractPriorityQueue;
 pub use nested_queue::BucketQueue;
 pub use no_priority_queue::NoPriorityQueue;
 pub use reordered_iterator::Reordered;
+
+#[cfg(feature = "dependency")]
+pub use dependency_queue::{Blocker, BlockingQueue};
