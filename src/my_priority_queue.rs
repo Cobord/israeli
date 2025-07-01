@@ -14,6 +14,34 @@ pub trait AbstractPriorityQueue<T, P: Ord> {
     /// just doing them one by one
     fn enqueue_batch(&mut self, new_batch: impl IntoIterator<Item = T>, new_batch_priority: P);
 
+    fn enqueue_many(&mut self, mut new_obj_and_priorities: impl Iterator<Item = (T, P)>) {
+        if let Some((first_item, first_item_priority)) = new_obj_and_priorities.next() {
+            let mut batch_to_send = Vec::new();
+            batch_to_send.push(first_item);
+            while let Some((next_item, next_item_priority)) = new_obj_and_priorities.next() {
+                if next_item_priority == first_item_priority {
+                    batch_to_send.push(next_item);
+                } else {
+                    if batch_to_send.len() == 1 {
+                        self.my_enqueue(
+                            batch_to_send.pop().expect("Already checked length"),
+                            first_item_priority,
+                        );
+                    } else if !batch_to_send.is_empty() {
+                        self.enqueue_batch(batch_to_send, first_item_priority);
+                    } else {
+                        unreachable!()
+                    }
+                    return self.enqueue_many(
+                        [(next_item, next_item_priority)]
+                            .into_iter()
+                            .chain(new_obj_and_priorities),
+                    );
+                }
+            }
+        }
+    }
+
     /// if nonempty, one item comes out
     /// the order is dependent on the specific implementation
     /// and how it handles priorities

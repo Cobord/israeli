@@ -24,6 +24,12 @@ where
             queue_capacity,
         }
     }
+
+    pub fn flush(&mut self) -> impl Iterator<Item = (T, P)> {
+        let mut replace_queue = self.current_queue.empty_copy();
+        core::mem::swap(&mut replace_queue, &mut self.current_queue);
+        replace_queue.drain_all().into_iter()
+    }
 }
 
 pub trait Reorderable<T, P, Q>: Iterator<Item = Result<(T, P), (Vec<T>, P)>> + Sized
