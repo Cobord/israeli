@@ -30,6 +30,28 @@ where
         core::mem::swap(&mut replace_queue, &mut self.current_queue);
         replace_queue.drain_all().into_iter()
     }
+
+    pub fn chain_more<I2>(self, more_stuff: I2) -> Reordered<T, P, std::iter::Chain<I, I2>, Q>
+    where
+        I2: Iterator<Item = Result<(T, P), (Vec<T>, P)>>,
+    {
+        Reordered::<T, P, std::iter::Chain<I, I2>, Q> {
+            to_feed_in: self.to_feed_in.chain(more_stuff),
+            current_queue: self.current_queue,
+            queue_capacity: self.queue_capacity,
+        }
+    }
+
+    pub fn enqueue_now(&mut self, something_now: Result<(T, P), (Vec<T>, P)>) {
+        match something_now {
+            Ok((cur_t, cur_p)) => {
+                self.current_queue.my_enqueue(cur_t, cur_p);
+            }
+            Err((cur_ts, cur_p)) => {
+                self.current_queue.enqueue_batch(cur_ts, cur_p);
+            }
+        }
+    }
 }
 
 pub trait Reorderable<T, P, Q>: Iterator<Item = Result<(T, P), (Vec<T>, P)>> + Sized
