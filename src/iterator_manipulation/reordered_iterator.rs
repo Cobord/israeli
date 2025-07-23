@@ -1,5 +1,9 @@
 use crate::{AbstractPriorityQueue, FlushableIterator};
 
+/// Items come in via an iterator `to_feed_in`
+/// but rather than just output them as is we are putting them into
+/// `current_queue` which allows us to possibly reorder how they come out
+/// according to priority `P`.
 pub struct Reordered<T, P, I, Q>
 where
     I: Iterator<Item = Result<(T, P), (Vec<T>, P)>>,
