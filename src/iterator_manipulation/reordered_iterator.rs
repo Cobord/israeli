@@ -1,4 +1,4 @@
-use crate::AbstractPriorityQueue;
+use crate::{AbstractPriorityQueue, FlushableIterator};
 
 pub struct Reordered<T, P, I, Q>
 where
@@ -23,12 +23,6 @@ where
             current_queue,
             queue_capacity,
         }
-    }
-
-    pub fn flush(&mut self) -> impl Iterator<Item = (T, P)> {
-        let mut replace_queue = self.current_queue.empty_copy();
-        core::mem::swap(&mut replace_queue, &mut self.current_queue);
-        replace_queue.drain_all().into_iter()
     }
 
     pub fn chain_more<I2>(self, more_stuff: I2) -> Reordered<T, P, std::iter::Chain<I, I2>, Q>
@@ -100,5 +94,18 @@ where
         } else {
             None
         }
+    }
+}
+
+impl<T, P, I, Q> FlushableIterator for Reordered<T, P, I, Q>
+where
+    I: Iterator<Item = Result<(T, P), (Vec<T>, P)>>,
+    Q: AbstractPriorityQueue<T, P>,
+    P: Ord,
+{
+    fn flush(&mut self) -> impl Iterator<Item = (T, P)> {
+        let mut replace_queue = self.current_queue.empty_copy();
+        core::mem::swap(&mut replace_queue, &mut self.current_queue);
+        replace_queue.drain_all().into_iter()
     }
 }

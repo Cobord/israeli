@@ -75,7 +75,7 @@ mod test {
 
     #[test]
     fn nothing_in_out_iter() {
-        use crate::reordered_iterator::Reordered;
+        use crate::Reordered;
         use priority_queue::PriorityQueue;
         let q = PriorityQueue::<u8, u8>::new();
         let it = [].into_iter();
@@ -106,7 +106,7 @@ mod test {
 
     #[test]
     fn rev_order_inout() {
-        use crate::reordered_iterator::{Reorderable, Reordered};
+        use crate::{Reorderable, Reordered};
         use priority_queue::PriorityQueue;
 
         let q = PriorityQueue::<u8, u8>::new();
